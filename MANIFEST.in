@@ -1,0 +1,18 @@
+include MANIFEST.in
+include requirements.txt
+include *.json
+include *.md
+include *.py
+include *.txt
+recursive-include crypto *.css
+recursive-include crypto *.csv
+recursive-include crypto *.html
+recursive-include crypto *.ico
+recursive-include crypto *.js
+recursive-include crypto *.json
+recursive-include crypto *.md
+recursive-include crypto *.png
+recursive-include crypto *.py
+recursive-include crypto *.svg
+recursive-include crypto *.txt
+recursive-exclude crypto *.pyc

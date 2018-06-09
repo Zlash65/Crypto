@@ -90,7 +90,13 @@ app_license = "MIT"
 # Scheduled Tasks
 # ---------------
 
-# scheduler_events = {
+scheduler_events = {
+	"cron": {
+		"0/02 * * * *": [
+            "crypto.crypto.doctype.market_api.market_api.fetch_from_api"
+        ],
+	}
+}
 # 	"all": [
 # 		"crypto.tasks.all"
 # 	],

@@ -6,6 +6,5 @@ from __future__ import unicode_literals
 import frappe
 from frappe.model.document import Document
 
-class CoinExchange(Document):
-	def autoname(self):
-		self.name = "{0} - {1}".format(frappe.db.escape(self.from_coin), frappe.db.escape(self.to_coin))
+class MarketAPIFieldMapper(Document):
+	pass

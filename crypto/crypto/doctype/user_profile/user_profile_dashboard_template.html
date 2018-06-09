@@ -1,0 +1,26 @@
+{% if data %}
+<h5 style="margin-top: 20px;"> {{ __("Invested Coins") }} </h5>
+<table class="table table-bordered small">
+	<thead>
+		<tr>
+			<th style="width: 20%">{%= __(columns[0]) %}</th>
+			<th style="width: 20%" class="text-right">{%= __(columns[1]) %}</th>
+			<th style="width: 20%" class="text-right">{%= __(columns[2]) %}</th>
+			<th style="width: 20%" class="text-right">{%= __(columns[3]) %}</th>
+			<th style="width: 20%" class="text-right">{%= __(columns[4]) %}</th>
+		</tr>
+
+	</thead>
+	<tbody>
+		{% for(const [key, value] of Object.entries(data)) { %}
+			<tr>
+				<td> {%= value[0] %} </td>
+				<td class="text-right"> {%= value[1] %} </td>
+				<td class="text-right"> {%= value[2] %} </td>
+				<td class="text-right"> {%= value[3] %} </td>
+				<td class="text-right"> {%= value[4] %} </td>
+			</tr>
+		{% } %}
+	</tbody>
+</table>
+{% } %}

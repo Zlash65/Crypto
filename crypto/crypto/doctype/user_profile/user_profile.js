@@ -15,5 +15,25 @@ frappe.ui.form.on('User Profile', {
 				"ref_name": frm.doc.name
 			};
 		});
-	}
+	},
+	refresh: function(frm) {
+		frm.trigger("make_dashboard");
+	},
+	onload_post_render: function(frm) {
+		frm.trigger("make_dashboard");
+	},
+	make_dashboard: function(frm) {
+		frappe.call({
+			method: "crypto.crypto.doctype.user_profile.user_profile.get_dashboard_data"
+		}).then(r => {
+			$("div").remove(".form-dashboard-section.custom");
+			let section = frm.dashboard.add_section(
+				frappe.render_template('user_profile_dashboard_template', {
+					data: r.message.data,
+					columns: r.message.columns
+				})
+			);
+			frm.dashboard.show();
+		});
+	},
 });

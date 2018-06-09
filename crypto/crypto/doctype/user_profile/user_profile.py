@@ -19,7 +19,7 @@ class UserProfile(Document):
 def get_timeline_data(doctype, name):
 	'''returns timeline data for the past one year'''
 	from frappe.desk.form.load import get_communication_data
-	print(doctype, name, "here")
+
 	out = {}
 	fields = 'date(creation), count(name)'
 	after = add_years(None, -1).strftime('%Y-%m-%d')
@@ -43,4 +43,44 @@ def get_timeline_data(doctype, name):
 		timestamp = get_timestamp(date)
 		out.update({ timestamp: count })
 
+	return out
+
+@frappe.whitelist()
+def get_dashboard_data():
+
+	def get_market_price(market, temp):
+		for i in temp:
+			if market == i['market']:
+				return i
+
+	my_coins = frappe.db.get_all("My Investments", fields=['coin', 'market', 'buy_price'])
+
+	distinct_market = [d.name for d in frappe.db.get_all("Market")]
+	columns = ["Coin", "Bought at"]
+	columns.extend(distinct_market)
+
+	data = []
+	for coin in my_coins:
+		coin_parent = "{0} - INR".format(coin.coin)
+		temp = frappe.db.sql("""
+			select distinct market, parent, current_sell_price
+			from `tabCoin Market Detail`
+			where market in ({0}) and parent='{1}'
+			order by modified desc limit {2}
+			""".format(', '.join(["'%s'" % d for d in distinct_market]), coin_parent, len(distinct_market)),as_dict=True)
+
+		if not temp:
+			continue
+
+		out = []
+		out.append(coin.coin)
+		out.append("{0} ( {1} )".format(coin.buy_price, coin.market))
+		for i in distinct_market:
+			current = get_market_price(i, temp)
+			out.append(current['current_sell_price'])
+		data.append(out)
+
+	out = {}
+	out["columns"] = columns
+	out["data"] = data
 	return out

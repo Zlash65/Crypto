@@ -5,7 +5,7 @@ def get_data():
 		'heatmap': True,
 		'heatmap_message': _('This is based on transactions/Investments that the user adds.'),
 
-		'graph': True,
+		# 'graph': True,
 		# 'graph_method': "frappe.utils.goal.get_monthly_goal_graph_data",
 		# 'graph_method_args': {
 		# 	'title': _('Sales'),

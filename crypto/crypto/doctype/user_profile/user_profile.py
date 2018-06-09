@@ -5,7 +5,8 @@
 from __future__ import unicode_literals
 import frappe
 from frappe.model.document import Document
-from frappe.utils import add_years
+from frappe.utils import add_years, get_timestamp
+from six import iteritems
 
 class UserProfile(Document):
 	def get_feed(self):
@@ -34,6 +35,12 @@ def get_timeline_data(doctype, name):
 		and status!='Success' and creation > {after}
 		{group_by} order by creation desc
 		""".format(doctype=doctype, name=name, fields=fields,
-			group_by=group_by, after=after), as_dict=False, debug=1)
+			group_by=group_by, after=after), as_dict=False)
 
 	timeline_items = dict(data)
+
+	for date, count in iteritems(timeline_items):
+		timestamp = get_timestamp(date)
+		out.update({ timestamp: count })
+
+	return out

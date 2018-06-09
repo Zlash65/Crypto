@@ -67,7 +67,7 @@ def get_dashboard_data():
 			from `tabCoin Market Detail`
 			where market in ({0}) and parent='{1}'
 			order by modified desc limit {2}
-			""".format(', '.join(["'%s'" % d for d in distinct_market]), coin_parent, len(distinct_market)),as_dict=True)
+			""".format(', '.join(["'%s'" % d for d in distinct_market]), coin_parent, len(distinct_market)), as_dict=True)
 
 		if not temp:
 			continue

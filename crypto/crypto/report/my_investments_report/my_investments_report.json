@@ -1,0 +1,28 @@
+{
+ "add_total_row": 0, 
+ "creation": "2018-06-09 22:42:21.351426", 
+ "disabled": 0, 
+ "docstatus": 0, 
+ "doctype": "Report", 
+ "idx": 0, 
+ "is_standard": "Yes", 
+ "modified": "2018-06-09 22:51:18.588879", 
+ "modified_by": "Administrator", 
+ "module": "Crypto", 
+ "name": "My Investments Report", 
+ "owner": "Administrator", 
+ "ref_doctype": "My Investments", 
+ "report_name": "My Investments Report", 
+ "report_type": "Script Report", 
+ "roles": [
+  {
+   "role": "System Manager"
+  }, 
+  {
+   "role": "Trading User"
+  }, 
+  {
+   "role": "Trading Manager"
+  }
+ ]
+}

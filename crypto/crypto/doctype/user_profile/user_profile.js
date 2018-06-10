@@ -24,16 +24,21 @@ frappe.ui.form.on('User Profile', {
 	},
 	make_dashboard: function(frm) {
 		frappe.call({
-			method: "crypto.crypto.doctype.user_profile.user_profile.get_dashboard_data"
+			method: "crypto.crypto.doctype.user_profile.user_profile.get_dashboard_data",
+			args: {
+				"username": frm.doc.username
+			}
 		}).then(r => {
-			$("div").remove(".form-dashboard-section.custom");
-			let section = frm.dashboard.add_section(
-				frappe.render_template('user_profile_dashboard_template', {
-					data: r.message.data,
-					columns: r.message.columns
-				})
-			);
-			frm.dashboard.show();
+			if(r.message.data.length > 0) {
+				$("div").remove(".form-dashboard-section.custom");
+				let section = frm.dashboard.add_section(
+					frappe.render_template('user_profile_dashboard_template', {
+						data: r.message.data,
+						columns: r.message.columns
+					})
+				);
+				frm.dashboard.show();
+			}
 		});
 	},
 });

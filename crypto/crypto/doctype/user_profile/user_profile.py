@@ -46,14 +46,14 @@ def get_timeline_data(doctype, name):
 	return out
 
 @frappe.whitelist()
-def get_dashboard_data():
+def get_dashboard_data(username):
 
 	def get_market_price(market, temp):
 		for i in temp:
 			if market == i['market']:
 				return i
 
-	my_coins = frappe.db.get_all("My Investments", fields=['coin', 'market', 'buy_price'])
+	my_coins = frappe.db.get_all("My Investments", fields=['coin', 'market', 'buy_price'], filters={"user_profile": username})
 
 	distinct_market = [d.name for d in frappe.db.get_all("Market")]
 	columns = ["Coin", "Bought at"]

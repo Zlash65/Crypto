@@ -89,7 +89,7 @@
  "issingle": 0, 
  "istable": 0, 
  "max_attachments": 0, 
- "modified": "2018-06-10 01:08:35.588738", 
+ "modified": "2018-06-10 02:47:10.633310", 
  "modified_by": "Administrator", 
  "module": "Crypto", 
  "name": "Coin", 
@@ -140,7 +140,7 @@
    "create": 1, 
    "delete": 0, 
    "email": 1, 
-   "export": 1, 
+   "export": 0, 
    "if_owner": 0, 
    "import": 0, 
    "permlevel": 0, 
@@ -151,7 +151,7 @@
    "set_user_permissions": 0, 
    "share": 1, 
    "submit": 0, 
-   "write": 1
+   "write": 0
   }
  ], 
  "quick_entry": 1, 

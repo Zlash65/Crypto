@@ -23,6 +23,7 @@ frappe.ui.form.on('User Profile', {
 		frm.trigger("make_dashboard");
 	},
 	make_dashboard: function(frm) {
+		// get dashboard data from server and render it using jinja
 		frappe.call({
 			method: "crypto.crypto.doctype.user_profile.user_profile.get_dashboard_data",
 			args: {

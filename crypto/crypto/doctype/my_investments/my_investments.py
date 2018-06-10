@@ -17,12 +17,14 @@ class MyInvestments(Document):
 		self.set_missing_values()
 
 	def set_missing_values(self):
+		# set total bought and sold field
 		self.total_investment = self.quantity * self.buy_price
 		if self.sold:
 			self.total_sold_amount = self.quantity * self.sell_price
 
 @frappe.whitelist()
 def add_event(doc, bot_sold):
+	# add events data for calendar view
 	doc = json.loads(doc)
 	b_or_s = "Bought" if bot_sold=='buy_date' else "Sold"
 	user = frappe.db.get_value('User Profile', {"email": frappe.session.user})

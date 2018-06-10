@@ -20,6 +20,7 @@ class UserProfile(Document):
 
 @frappe.whitelist()
 def get_timeline_data(doctype, name):
+	# retrieves heatmap data
 	'''returns timeline data for the past one year'''
 	from frappe.desk.form.load import get_communication_data
 
@@ -50,7 +51,7 @@ def get_timeline_data(doctype, name):
 
 @frappe.whitelist()
 def get_dashboard_data(username):
-
+	# retrieve dashboard data
 	def get_market_price(market, temp):
 		for i in temp:
 			if market == i['market']:
@@ -94,6 +95,7 @@ def send_notification_force():
 
 @frappe.whitelist()
 def send_notification(ignore_condition=False):
+	# sending out email and bot message on price hike
 	users = [d.name for d in frappe.db.get_all("User", filters={"name": ['not in', "Administrator, Guest"]})]
 	for user in users:
 		user_detail = frappe.db.get_all("User Profile", filters={"email": user}, fields=['username', 'notify_me', 'notify_threshold'])

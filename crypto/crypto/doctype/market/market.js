@@ -2,6 +2,7 @@
 // For license information, please see license.txt
 
 frappe.ui.form.on('Market', {
+	// add or view button to set/view MArket API
 	onload_post_render: function(frm) {
 		if(!frm.doc.__islocal) {
 			frappe.model.with_doc("Market API", (frm.doc.market_name + " - api"), function(r) {

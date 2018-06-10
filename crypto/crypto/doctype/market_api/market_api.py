@@ -8,12 +8,13 @@ class MarketAPI(Document):
 	def autoname(self):
 		self.name = "{0} - api".format(frappe.db.escape(self.market))
 
-	def validate(self):
-		fetch_from_api()
-
 @frappe.whitelist()
 def fetch_from_api():
-	''' query all markets api added and commonify their data '''
+	'''
+		query all markets api added and commonify their data
+
+		Add the api file for a new market in the apis folder and map the data to the existing schema
+	'''
 	markets = frappe.db.get_all("Market API", fields=['*'])
 
 	data = []

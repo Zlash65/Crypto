@@ -35,5 +35,6 @@ def add_event(doc, bot_sold):
 			'send_reminder': 0,
 			'description': doc['name'],
 			'ref_type': 'User Profile',
-			'ref_name': user
+			'ref_name': user,
+			'my_investments': doc['name']
 		}).insert(ignore_permissions=True)

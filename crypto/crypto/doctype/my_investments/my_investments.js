@@ -10,6 +10,11 @@ frappe.ui.form.on('My Investments', {
 			})
 		}
 	},
+	onload_post_render: function(frm) {
+		frm.add_custom_button(__('View calendar'), function() {
+			frappe.set_route('List', 'Event', 'Calendar')
+		});
+	},
 	sold: function(frm){
 		frm.trigger("refresh");
 	},

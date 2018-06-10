@@ -4,8 +4,11 @@
 
 from __future__ import unicode_literals
 import frappe
+from frappe import _
 from frappe.model.document import Document
-from frappe.utils import add_years, get_timestamp
+from frappe.utils import add_years, get_timestamp, flt
+from frappe.chat.doctype.chat_message.chat_message import send
+from frappe.chat.doctype.chat_room.chat_room import create, is_direct, get_room
 from six import iteritems
 
 class UserProfile(Document):
@@ -84,3 +87,61 @@ def get_dashboard_data(username):
 	out["columns"] = columns
 	out["data"] = data
 	return out
+
+@frappe.whitelist()
+def send_notification_force():
+	send_notification(True)
+
+@frappe.whitelist()
+def send_notification(ignore_condition=False):
+	users = [d.name for d in frappe.db.get_all("User", filters={"name": ['not in', "Administrator, Guest"]})]
+	for user in users:
+		user_detail = frappe.db.get_all("User Profile", filters={"email": user}, fields=['username', 'notify_me', 'notify_threshold'])
+
+		if not user_detail: continue
+		else: user_detail = user_detail[0]
+
+		if user_detail.notify_me:
+			coin_detail = frappe.db.get_all('My Investments', filters={"user_profile": user_detail.username},
+				fields=['coin', 'notify_me', 'notify_threshold', 'buy_price'])
+		else:
+			coin_detail = frappe.db.get_all("My Investments", filters={"user_profile": user_detail.username, 'notify_me': 1},
+				fields=['coin', 'notify_me', 'notify_threshold', 'buy_price'])
+
+		if not coin_detail:
+			continue
+
+		room = ""
+		temp = frappe.session.user
+		frappe.session.user = 'trading_bot@hackathon.com'
+		if not is_direct('trading_bot@hackathon.com', user):
+			room = create('Direct', 'trading_bot@hackathon.com', user)
+		else:
+			room = get_room('trading_bot@hackathon.com', user)
+
+		for d in coin_detail:
+			threshold = d.notify_threshold if d.notify_threshold!=0 else user_detail.notify_threshold
+
+			hike_price = flt(d.buy_price + (d.buy_price * d.notify_threshold)/100, 3)
+
+			data = frappe.db.sql("""
+					select distinct cmd.market, cmd.current_sell_price
+					from `tabCoin Market Detail` cmd, `tabCoin Exchange` ce
+					where cmd.current_sell_price > 519699.0 and ce.from_coin='{0}'
+					group by cmd.market order by cmd.current_sell_price desc
+				""".format(d.coin), as_dict=True)
+
+			message = []
+			for i in data:
+				message.append("{0} : {1}".format(i.market, i.current_sell_price))
+			message = ' & '.join(message)
+
+			# similar message shouldn't be sent again and again
+			message_template = ("{0} price hiked by {1}% \t {2}").format(d.coin, d.notify_threshold, message)
+			if not frappe.db.get_value('Chat Message', {'content': message_template}) or ignore_condition:
+				frappe.sendmail(recipients=user,
+					subject=_("{0} price hiked by {1}%").format(d.coin, threshold),
+					message=_(message))
+				room = room[0].name
+
+				send('trading_bot@hackathon.com', room, threshold)

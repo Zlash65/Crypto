@@ -95,6 +95,12 @@ scheduler_events = {
 		"0/02 * * * *": [
             "crypto.crypto.doctype.market_api.market_api.fetch_from_api"
         ],
+		"0/01 * * * *": [
+            "crypto.crypto.doctype.user_profile.user_profile.send_notification"
+        ],
+		"0/30 * * * *": [
+            "crypto.crypto.doctype.user_profile.user_profile.send_notification_force"
+        ],
 	}
 }
 # 	"all": [

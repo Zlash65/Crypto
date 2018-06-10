@@ -24,7 +24,7 @@ def get_data(columns, filters=None):
 		for d in get_my_coins():
 			cond.append("(child.parent like '%{0}%')".format(d))
 		condition = "and (" + " or ".join(cond) + ")" if cond else ""
-		frappe.errprint(condition)
+
 
 	all_data = frappe.db.sql("""
 		select parent.from_coin, parent.to_coin, child.market, child.current_ask_price,
@@ -57,8 +57,11 @@ def get_data(columns, filters=None):
 
 
 @frappe.whitelist()
-def get_my_coins():
+def get_my_coins(sold=False):
+	condition = ""
+	if sold:
+		condition = " and sold=0"
 	user = frappe.db.get_value("User Profile", {"email": frappe.session.user})
-	my_coins = [d.coin for d in frappe.db.sql("""select distinct coin from `tabMy Investments` where user_profile='{0}'""".format(user), as_dict=True)]
+	my_coins = [d.coin for d in frappe.db.sql("""select distinct coin from `tabMy Investments` where user_profile='{0}' {1}""".format(user, condition), as_dict=True)]
 
 	return my_coins

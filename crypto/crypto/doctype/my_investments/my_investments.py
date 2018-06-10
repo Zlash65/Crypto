@@ -17,3 +17,5 @@ class MyInvestments(Document):
 
 	def set_missing_values(self):
 		self.total_investment = self.quantity * self.buy_price
+		if self.sold:
+			self.total_sold_amount = self.quantity * self.sell_price

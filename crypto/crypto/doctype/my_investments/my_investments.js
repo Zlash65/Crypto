@@ -12,5 +12,25 @@ frappe.ui.form.on('My Investments', {
 	},
 	sold: function(frm){
 		frm.trigger("refresh");
+	},
+	validate: function(frm) {
+		if(frm.doc.buy_date) {
+			frappe.call({
+				"method": "crypto.crypto.doctype.my_investments.my_investments.add_event",
+				args: {
+					"doc": frm.doc,
+					"bot_sold": "buy_date"
+				}
+			})
+		}
+		if(frm.doc.sell_date) {
+			frappe.call({
+				"method": "crypto.crypto.doctype.my_investments.my_investments.add_event",
+				args: {
+					"doc": frm.doc,
+					"bot_sold": "sell_date"
+				}
+			})
+		}
 	}
 });
